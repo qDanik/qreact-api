@@ -1,0 +1,49 @@
+{
+  "name": "qreact-api",
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": "qDanik <qdanik@yandex.ru>",
+  "repository": "github:qdanik/qreact-api",
+  "description": "API libraries for Dependency Injector or React App",
+  "homepage": "https://github.com/qDanik/qreact-api",
+  "keywords": [
+    "react-parts",
+    "parts",
+    "react-http",
+    "http",
+    "react-api",
+    "api",
+    "react-endpoints",
+    "endpoints",
+    "react-connection",
+    "connection",
+    "fetch",
+    "react-fetch",
+    "react-requests"
+  ],
+  "main": "dist/react-api.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build:dev": "rollup -c --environment BUILD:development",
+    "build:prod": "rollup -c --compact --environment INCLUDE_DEPS,BUILD:production"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
+    "@typescript-eslint/parser": "^1.6.0",
+    "eslint": "^5.16.0",
+    "eslint-config-typescript": "^2.0.0",
+    "eslint-plugin-typescript": "^0.14.0",
+    "qreact-cipher": "^0.0.1",
+    "qreact-di": "^0.0.7",
+    "rollup": "^1.8.0",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-dts": "^0.14.0",
+    "rollup-plugin-typescript": "^1.0.1",
+    "typescript": "^3.4.1",
+    "typescript-eslint-parser": "^22.0.0"
+  }
+}
