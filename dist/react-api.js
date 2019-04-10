@@ -81,31 +81,33 @@ function __generator(thisArg, body) {
         return window.fetch("" + this.getUrl(url) + (query && "?" + query), { method: 'get', }).then(Http.toText);
     };
     Http.toJson = function (response) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = {};
-                        return [4 /*yield*/, response.json()];
-                    case 1: return [2 /*return*/, (_a.data = _b.sent(),
-                            _a.status = response.status,
-                            _a)];
+        return __awaiter(this, void 0, Promise, function () {
+            var data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, response.json()];
+                    case 1:
+                        data = _a.sent();
+                        return [2 /*return*/, {
+                                data: data,
+                                status: response.status,
+                            }];
                 }
             });
         });
     };
     Http.toText = function (response) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = {};
-                        return [4 /*yield*/, response.text()];
-                    case 1: return [2 /*return*/, (_a.data = _b.sent(),
-                            _a.status = response.status,
-                            _a)];
+        return __awaiter(this, void 0, Promise, function () {
+            var data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, response.text()];
+                    case 1:
+                        data = _a.sent();
+                        return [2 /*return*/, {
+                                data: data,
+                                status: response.status,
+                            }];
                 }
             });
         });

@@ -22,20 +22,6 @@ declare enum EffectiveConnectionType {
 declare type TConnection = EConnection | undefined;
 declare type TDownlink = number | undefined;
 
-declare class Connection implements IConnection {
-    private readonly status;
-    private connect;
-    constructor(callback?: null);
-    getStatus(): boolean;
-    getType(): TConnection;
-    getEffectiveType(): EffectiveConnectionType;
-    getDownlink(): TDownlink;
-    getDownlinkMax(): TDownlink;
-    getRtt(): number;
-    getSaveData(): boolean;
-    setCallback(callback: any): Connection;
-}
-
 interface IConnection {
     getStatus(): boolean;
     getType(): TConnection;
@@ -44,7 +30,7 @@ interface IConnection {
     getDownlinkMax(): TDownlink;
     getRtt(): number;
     getSaveData(): boolean;
-    setCallback(callback: any): Connection;
+    setCallback(callback: any): this;
 }
 
 interface IParams {
@@ -53,6 +39,10 @@ interface IParams {
 
 declare type TCredentials = 'omit' | 'same-origin' | 'include';
 
+interface IResponse {
+    data: any;
+    status: string;
+}
 interface IOptions {
     headers?: HeadersInit;
     withCredentials?: boolean;
@@ -61,7 +51,7 @@ interface IOptions {
 }
 interface IHttp {
     [key: string]: any;
-    create(options: IOptions): Http;
+    create(options: IOptions): this;
     getOptions(): RequestInit;
     getUrl(url: string): string;
     post(url: string, params: IParams): Promise<any>;
@@ -72,19 +62,13 @@ interface IHttp {
 declare class Http implements IHttp {
     private options;
     constructor();
-    create(options: IOptions): Http;
+    create(options: IOptions): this;
     getOptions(): RequestInit;
     getUrl(url: string): string;
     post(url: string, params: IParams): Promise<any>;
     get(url: string, params: IParams): Promise<any>;
-    static toJson(response: any): Promise<{
-        data: any;
-        status: any;
-    }>;
-    static toText(response: any): Promise<{
-        data: any;
-        status: any;
-    }>;
+    static toJson(response: any): Promise<IResponse>;
+    static toText(response: any): Promise<IResponse>;
     queryString(params: IParams, letter?: string, separator?: string): string;
 }
 declare const _default: Http;
@@ -112,5 +96,19 @@ declare class CamelCase implements ICamelCase {
     result(): IData;
 }
 declare const _default$1: (data: any, options?: IOptions$1 | undefined) => object;
+
+declare class Connection implements IConnection {
+    private readonly status;
+    private connect;
+    constructor(callback?: null);
+    getStatus(): boolean;
+    getType(): TConnection;
+    getEffectiveType(): EffectiveConnectionType;
+    getDownlink(): TDownlink;
+    getDownlinkMax(): TDownlink;
+    getRtt(): number;
+    getSaveData(): boolean;
+    setCallback(callback: any): this;
+}
 
 export { CamelCase, Connection, Http, _default as http, _default$1 as toCamelCase };
