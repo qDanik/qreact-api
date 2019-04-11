@@ -16,6 +16,7 @@ declare global {
     }
 }
 
+export { Api } from './api';
 export { Connection } from './connection';
 export {
     Http, http, toCamelCase, CamelCase
