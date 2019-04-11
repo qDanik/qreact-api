@@ -1,10 +1,10 @@
 export enum TMethods {
     get = 'GET',
-    heade = 'HEAD',
+    head = 'HEAD',
     post = 'POST',
     put = 'PUT',
     delete = 'DELETE',
-    conenct = 'CONNECT',
+    connect = 'CONNECT',
     options = 'OPTIONS',
     trace = 'TRACE',
     patch = 'PATCH',

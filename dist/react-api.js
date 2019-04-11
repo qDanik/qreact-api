@@ -268,11 +268,11 @@ var toCamelCase = (function (data, options) {
 });var TMethods;
 (function (TMethods) {
     TMethods["get"] = "GET";
-    TMethods["heade"] = "HEAD";
+    TMethods["head"] = "HEAD";
     TMethods["post"] = "POST";
     TMethods["put"] = "PUT";
     TMethods["delete"] = "DELETE";
-    TMethods["conenct"] = "CONNECT";
+    TMethods["connect"] = "CONNECT";
     TMethods["options"] = "OPTIONS";
     TMethods["trace"] = "TRACE";
     TMethods["patch"] = "PATCH";
