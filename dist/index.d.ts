@@ -33,8 +33,43 @@ interface IConnection {
     setCallback(callback: any): this;
 }
 
+declare enum TMethods {
+    get = "GET",
+    heade = "HEAD",
+    post = "POST",
+    put = "PUT",
+    delete = "DELETE",
+    conenct = "CONNECT",
+    options = "OPTIONS",
+    trace = "TRACE",
+    patch = "PATCH"
+}
+declare type TRequest = Promise<any>;
+
 interface IParams {
     [key: string]: any;
+}
+interface IEndpoints {
+    [key: string]: any;
+}
+interface IHeaders {
+    name: string;
+    value: any;
+}
+interface IOptions {
+    params?: IParams;
+    urlParams?: IParams;
+    method?: TMethods;
+}
+interface IApi {
+    request(path: string, options: IOptions): TRequest;
+    endpoint(path: string): string;
+    find(path: string): IEndpoints;
+    getBaseUrl(): string;
+    setEndpoints(values: IEndpoints): this;
+    setHeaders(headers: IHeaders[]): this;
+    setHeader(name: string, value: any): this;
+    setBaseUrl(value: string): this;
 }
 
 declare type TCredentials = 'omit' | 'same-origin' | 'include';
@@ -43,7 +78,7 @@ interface IResponse {
     data: any;
     status: string;
 }
-interface IOptions {
+interface IOptions$1 {
     headers?: HeadersInit;
     withCredentials?: boolean;
     credentials?: TCredentials;
@@ -51,7 +86,7 @@ interface IOptions {
 }
 interface IHttp {
     [key: string]: any;
-    create(options: IOptions): this;
+    create(options: IOptions$1): this;
     getOptions(): RequestInit;
     getUrl(url: string): string;
     post(url: string, params: IParams): Promise<any>;
@@ -62,7 +97,7 @@ interface IHttp {
 declare class Http implements IHttp {
     private options;
     constructor();
-    create(options: IOptions): this;
+    create(options: IOptions$1): this;
     getOptions(): RequestInit;
     getUrl(url: string): string;
     post(url: string, params: IParams): Promise<any>;
@@ -77,7 +112,7 @@ declare type TExclude = string | RegExp;
 interface IData {
     [key: string]: any;
 }
-interface IOptions$1 {
+interface IOptions$2 {
     readonly deep?: boolean;
     readonly exclude?: TExclude[];
 }
@@ -89,13 +124,34 @@ declare class CamelCase implements ICamelCase {
     private readonly data;
     private readonly options;
     private cache;
-    constructor(data: any, options?: IOptions$1);
+    constructor(data: any, options?: IOptions$2);
     private configure;
     private map;
     private convert;
     result(): IData;
 }
-declare const _default$1: (data: any, options?: IOptions$1 | undefined) => object;
+declare const _default$1: (data: any, options?: IOptions$2 | undefined) => object;
+
+declare class Api implements IApi {
+    private baseUrl;
+    private endpoints;
+    private headers;
+    private http;
+    constructor(baseUrl: string, endpoints: IEndpoints);
+    createHttp(): void;
+    private configureEndpoint;
+    private configureRequest;
+    request(path: string, options: IOptions): TRequest;
+    private get;
+    endpoint(path: string): string;
+    find(path: string): IEndpoints;
+    getBaseUrl(): string;
+    setEndpoints(values: IEndpoints): this;
+    setHeaders(headers: IHeaders[]): this;
+    setHeader(name: string, value: any): this;
+    setBaseUrl(value: string): this;
+    static decrypt(response: any): object;
+}
 
 declare class Connection implements IConnection {
     private readonly status;
@@ -111,4 +167,4 @@ declare class Connection implements IConnection {
     setCallback(callback: any): this;
 }
 
-export { CamelCase, Connection, Http, _default as http, _default$1 as toCamelCase };
+export { Api, CamelCase, Connection, Http, _default as http, _default$1 as toCamelCase };

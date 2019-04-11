@@ -262,10 +262,106 @@ var camelCase = function (input) {
     };
     return CamelCase;
 }());
-var index$1 = (function (data, options) {
+var toCamelCase = (function (data, options) {
     var converter = new CamelCase(data, options);
     return converter.result();
-});var Connection = /** @class */ (function () {
+});var TMethods;
+(function (TMethods) {
+    TMethods["get"] = "GET";
+    TMethods["heade"] = "HEAD";
+    TMethods["post"] = "POST";
+    TMethods["put"] = "PUT";
+    TMethods["delete"] = "DELETE";
+    TMethods["conenct"] = "CONNECT";
+    TMethods["options"] = "OPTIONS";
+    TMethods["trace"] = "TRACE";
+    TMethods["patch"] = "PATCH";
+})(TMethods || (TMethods = {}));var DEFAULT_METHOD = window.DEFAULT_METHOD || TMethods.get;
+var CIPHER_STATUS = window.CIPHER_STATUS;
+var Api = /** @class */ (function () {
+    function Api(baseUrl, endpoints) {
+        this.headers = { 'Content-Type': 'application/json' };
+        this.http = new Http();
+        this.baseUrl = baseUrl || 'www.example.com';
+        this.endpoints = endpoints || {};
+        this.createHttp();
+    }
+    Api.prototype.createHttp = function () {
+        this.http = this.http.create({
+            baseUrl: this.getBaseUrl(),
+            headers: this.headers,
+            withCredentials: true,
+        });
+    };
+    Api.prototype.configureEndpoint = function (endpoint, params) {
+        var paramsArr = Object.keys(params);
+        return paramsArr.reduce(function (result, key) { return result.replace(":" + key, params[key]); }, endpoint);
+    };
+    Api.prototype.configureRequest = function (configuration) {
+        var method = configuration.method, options = configuration.options, url = configuration.url;
+        var callback = this.http[method.toLowerCase()];
+        return callback(url, options.params).then(Api.decrypt);
+    };
+    Api.prototype.request = function (path, options) {
+        var url = this.find(path).toString();
+        var method = options.method || DEFAULT_METHOD;
+        var params = options.params, urlParams = options.urlParams;
+        if (urlParams) {
+            url = this.configureEndpoint(url, urlParams);
+        }
+        return this.configureRequest({ method: method, url: url, options: { params: params } });
+    };
+    Api.prototype.get = function (name, endpoints) {
+        if (endpoints === void 0) { endpoints = this.endpoints; }
+        return endpoints[name] ? endpoints[name] : false;
+    };
+    Api.prototype.endpoint = function (path) {
+        return "" + this.getBaseUrl() + this.find(path);
+    };
+    Api.prototype.find = function (path) {
+        var _this = this;
+        var paths = path.split('.');
+        return paths.reduce(function (result, value) { return _this.get(value, result); }, this.endpoints);
+    };
+    Api.prototype.getBaseUrl = function () {
+        return this.baseUrl;
+    };
+    Api.prototype.setEndpoints = function (values) {
+        this.endpoints = __assign({}, this.endpoints, values);
+        return this;
+    };
+    Api.prototype.setHeaders = function (headers) {
+        for (var count = 0; count < headers.length; count++) {
+            var header = headers[count];
+            this.setHeader(header.name, header.value);
+        }
+        this.createHttp();
+        return this;
+    };
+    Api.prototype.setHeader = function (name, value) {
+        this.headers[name] = value;
+        return this;
+    };
+    Api.prototype.setBaseUrl = function (value) {
+        this.baseUrl = value;
+        return this;
+    };
+    Api.decrypt = function (response) {
+        var data = response.data;
+        if (CIPHER_STATUS) {
+            var decrypted = window.di.cipher.decrypt(data);
+            try {
+                data = toCamelCase(decrypted, { deep: true });
+            }
+            catch (e) {
+                data = decrypted;
+            }
+        }
+        data = typeof data === 'object' ? toCamelCase(data, { deep: true }) : data;
+        return __assign({}, response, { data: data });
+    };
+    return Api;
+}());var Connection = /** @class */ (function () {
     function Connection(callback) {
         if (callback === void 0) { callback = null; }
         var _a = window.navigator, connection = _a.connection, onLine = _a.onLine;
@@ -301,4 +397,4 @@ var index$1 = (function (data, options) {
         return this;
     };
     return Connection;
-}());exports.CamelCase=CamelCase;exports.Connection=Connection;exports.Http=Http;exports.http=index;exports.toCamelCase=index$1;
+}());exports.Api=Api;exports.CamelCase=CamelCase;exports.Connection=Connection;exports.Http=Http;exports.http=index;exports.toCamelCase=toCamelCase;
